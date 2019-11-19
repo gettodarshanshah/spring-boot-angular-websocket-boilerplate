@@ -36,3 +36,12 @@ services:
     image: module1:latest
     ports:
       - 4000:4000
+
+  webapp:
+    build: webapp
+    image: webapp:latest
+    ports:
+      - 8200:8200
+    restart: on-failure
+    depends_on:
+      - configservice
