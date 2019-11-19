@@ -14,6 +14,7 @@ services:
       - 8888:8888
     depends_on:
       - discoveryservice
+    restart: always
 
   apigateway:
     build: apigateway
@@ -22,6 +23,7 @@ services:
       - 9091:9091
     depends_on:
       - configservice
+    restart: always
 
   helloservice:
     build: helloservice
@@ -30,18 +32,19 @@ services:
       - 8081:8081
     depends_on:
       - configservice
+    restart: always
 
-  module1:
-    build: multimodule
-    image: module1:latest
-    ports:
-      - 4000:4000
+  # module1:
+  #   build: multimodule
+  #   image: module1:latest
+  #   ports:
+  #     - 4000:4000
 
   webapp:
     build: webapp
     image: webapp:latest
     ports:
       - 8200:8200
-    restart: on-failure
+    restart: always
     depends_on:
       - configservice
