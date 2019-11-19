@@ -1,1 +1,3 @@
-# spring-boot-angular-websocket-boilerplate
+# spring-angular-boilerplate
+
+Spring boot application setup consisting of API gateway, discovery service, config service, and rest services.

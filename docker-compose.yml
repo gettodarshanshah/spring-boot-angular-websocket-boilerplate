@@ -1,0 +1,38 @@
+version: '3'
+services:
+  discoveryservice:
+    build: discoveryservice
+    image: discoveryservice:latest
+    ports:
+      - 8761:8761
+    restart: always
+
+  configservice:
+    build: configservice
+    image: configservice:latest
+    ports:
+      - 8888:8888
+    depends_on:
+      - discoveryservice
+
+  apigateway:
+    build: apigateway
+    image: apigateway:latest
+    ports:
+      - 9091:9091
+    depends_on:
+      - configservice
+
+  helloservice:
+    build: helloservice
+    image: helloservice:latest
+    ports:
+      - 8081:8081
+    depends_on:
+      - configservice
+
+  module1:
+    build: multimodule
+    image: module1:latest
+    ports:
+      - 4000:4000
