@@ -18,6 +18,8 @@ WORKDIR /server
 
 COPY pom.xml ./
 
+RUN mvn dependency:go-offline
+
 COPY src/ ./src/
 
 COPY --from=webapp_build /app/dist/ /server/src/main/resources/static/
