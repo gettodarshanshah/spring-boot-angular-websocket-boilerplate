@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import * as Stomp from 'stompjs';
+// import * as Stomp from 'stompjs';
+import { Stomp, CompatClient } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 
 @Component({

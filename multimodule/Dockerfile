@@ -1,12 +1,12 @@
 #FROM maven:3.6.2-jdk-11 as build
 
-FROM tastycats/gablumdeps:latest as build
+FROM iamdarshanshah/springboot-deps as build
 
 # ------------------- lib build -----------------
 
 COPY lib/pom.xml /usr/app/lib/pom.xml
 
-#RUN mvn dependency:go-offline
+# RUN mvn dependency:go-offline
 
 COPY lib/src /usr/app/lib/src
 
@@ -32,10 +32,15 @@ RUN mvn -e clean package -DskipTests
 
 RUN ls -l
 
+# -------------------- Using wait for to wait for discovery service to be up and running --------------
+
+FROM gesellix/wait-for as waitfor
+RUN ls
+
 # --------------------- www build completed -------------
 
 FROM openjdk:12
 RUN ls -la
-COPY --from=build /usr/app/module1/target/*.jar usr/app/exec/app.jar
-EXPOSE 4000
+COPY --from=build /usr/app/module1/target/*.jar /usr/app/exec/app.jar
+COPY --from=waitfor ./wait-for ./wait
 ENTRYPOINT ["java","-jar","/usr/app/exec/app.jar"]

@@ -6,14 +6,23 @@ services:
     ports:
       - 8761:8761
     restart: always
+    depends_on: 
+      - configservice
+    entrypoint:
+      - ./wait
+      - configservice:8888
+      - -t
+      - "300"
+      - --
+      - java
+      - -jar
+      - /usr/exec/app.jar
 
   configservice:
     build: configservice
     image: configservice:latest
     ports:
       - 8888:8888
-    depends_on:
-      - discoveryservice
     restart: always
 
   apigateway:
@@ -24,6 +33,15 @@ services:
     depends_on:
       - configservice
     restart: always
+    entrypoint:
+      - ./wait
+      - discoveryservice:8761
+      - -t
+      - "300"
+      - --
+      - java
+      - -jar
+      - usr/exec/app.jar
 
   helloservice:
     build: helloservice
@@ -33,12 +51,31 @@ services:
     depends_on:
       - configservice
     restart: always
+    entrypoint:
+      - ./wait
+      - discoveryservice:8761
+      - -t
+      - "300"
+      - --
+      - java
+      - -jar
+      - usr/exec/app.jar
 
-  # module1:
-  #   build: multimodule
-  #   image: module1:latest
-  #   ports:
-  #     - 4000:4000
+  module1:
+    build:
+      context: ./multimodule/
+    image: module1:latest
+    ports:
+      - 4000:4000
+    entrypoint:
+      - ./wait
+      - discoveryservice:8761
+      - -t
+      - "300"
+      - --
+      - java
+      - -jar
+      - /usr/app/exec/app.jar
 
   webapp:
     build: webapp
@@ -48,3 +85,12 @@ services:
     restart: always
     depends_on:
       - configservice
+    entrypoint:
+      - ./wait
+      - discoveryservice:8761
+      - -t
+      - "300"
+      - --
+      - java
+      - -jar
+      - /webappserver/target/app.jar
